@@ -540,6 +540,14 @@ function() {
       resultNode.innerHTML = result.value;
       result.value = mergeStreams(originalStream, nodeStream(resultNode), text);
     }
+
+    var resultPre = document.createElement('pre');
+    resultPre.innerHTML = result.value;
+    var linesPre = document.createElement('pre');
+    var lines = escape(text.trimRight()).replace(/^.*?(\n|$)/gm, '<span class="line">$&</span>');
+    linesPre.innerHTML = lines;
+    result.value = mergeStreams(nodeStream(linesPre), nodeStream(resultPre), text);
+    
     result.value = fixMarkup(result.value);
 
     block.innerHTML = result.value;
