@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="src/styles/github.css">
+    <script src="build/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+    <pre><code class="javascript">
+      var zetta = require('zetta');
+
+      var Buzzer = require('zetta-buzzer-bonescript-driver');
+
+      zetta()
+        .use(Buzzer, 'P9_14')
+        .listen(1337, function(){
+          console.log('Zetta is running at http://beaglebone.local:1337');
+        });
+    </code>
+    </pre>
+
+
+    <pre><code class="javascript-noln">
+      var zetta = require('zetta');
+
+      var Buzzer = require('zetta-buzzer-bonescript-driver');
+
+      zetta()
+        .use(Buzzer, 'P9_14')
+        .listen(1337, function(){
+          console.log('Zetta is running at http://beaglebone.local:1337');
+        });
+    </code>
+    </pre>
+
+    <pre><code class="javascript">
+      var zetta = require('zetta');
+    </code>
+    </pre>
+
+    <pre><code class="javascript">
+      var zetta = require('zetta');
+      var zetta = require('zetta');
+    </code>
+    </pre>
+
+  </body>
+</html>

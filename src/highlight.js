@@ -23,7 +23,15 @@ function() {
   function blockLanguage(block) {
     var classes = (block.className + ' ' + (block.parentNode ? block.parentNode.className : '')).split(/\s+/);
     classes = classes.map(function(c) {return c.replace(/^lang(uage)?-/, '');});
+    classes = classes.map(function(c) {return c.replace(/-noln$/, '');});
     return classes.filter(function(c) {return getLanguage(c) || /no(-?)highlight/.test(c);})[0];
+  }
+
+  function hasLinesDisabled(block) {
+    var classes = (block.className + ' ' + (block.parentNode ? block.parentNode.className : '')).split(/\s+/);
+    classes = classes.map(function(c) {return c.replace(/^lang(uage)?-/, '');});
+    classes = classes.filter(function(c) { return /-noln$/.test(c); });
+    return (classes.length > 0);
   }
 
   function inherit(parent, obj) {
@@ -541,13 +549,32 @@ function() {
       result.value = mergeStreams(originalStream, nodeStream(resultNode), text);
     }
 
-    var resultPre = document.createElement('pre');
-    resultPre.innerHTML = result.value;
-    var linesPre = document.createElement('pre');
-    var lines = escape(text.trimRight()).replace(/^.*?(\n|$)/gm, '<span class="line">$&</span>');
-    linesPre.innerHTML = lines;
-    result.value = mergeStreams(nodeStream(linesPre), nodeStream(resultPre), text);
-    
+    function hasEnoughLines(text, min) {
+      var i = 0;
+      var count = 0;
+      while (i < text.length) {
+        var idx = text.indexOf('\n', i);
+        if (idx > -1) {
+          count++;
+          i = idx;
+          if(count > min) {
+            return true;
+          }
+        }
+        i++;
+      }
+      return false;
+    }
+
+    if(!hasLinesDisabled(block) && hasEnoughLines(text, 2)) {
+      var resultPre = document.createElement('pre');
+      resultPre.innerHTML = result.value;
+      var linesPre = document.createElement('pre');
+      var lines = escape(text.trimRight()).replace(/^.*?(\n|$)/gm, '<span class="line">$&</span>');
+      linesPre.innerHTML = lines;
+      result.value = mergeStreams(nodeStream(linesPre), nodeStream(resultPre), text);
+    }
+
     result.value = fixMarkup(result.value);
 
     block.innerHTML = result.value;
